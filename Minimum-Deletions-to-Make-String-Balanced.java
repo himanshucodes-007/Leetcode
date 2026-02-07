@@ -1,22 +1,17 @@
 1class Solution {
-2
-3    public int minimumDeletions(String s) {
-4        int n = s.length();
-5        Stack<Character> charStack = new Stack<>();
-6        int deleteCount = 0;
-7        for (int i = 0; i < n; i++) {
-8            if (
-9                !charStack.isEmpty() &&
-10                charStack.peek() == 'b' &&
-11                s.charAt(i) == 'a'
-12            ) {
-13                charStack.pop();
-14                deleteCount++;
-15            } else {
-16                charStack.push(s.charAt(i));
-17            }
-18        }
-19
-20        return deleteCount;
-21    }
-22}
+2    public int minimumDeletions(String s) {
+3        int res =0;
+4        int count =0;
+5
+6        for(char c : s.toCharArray()){
+7            if(c == 'b'){
+8                count++;
+9            }
+10            else if(count != 0){
+11                res++;
+12                count--;
+13            }
+14        }
+15        return res;
+16    }
+17}
