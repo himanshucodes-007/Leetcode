@@ -1,31 +1,37 @@
 1class Solution {
-2    int dp[][];
-3
-4    public int uniquePaths(int m, int n) {
-5        dp = new int[m][n];
+2
+3    public int uniquePaths(int m, int n) {
+4
+5        int[] prev = new int[n];
 6
-7        for(int[] row:dp){
-8            Arrays.fill(row,-1);
-9        }
-10        return solve(m-1,n-1);
-11    }
+7        for(int i = 0; i < m; i++){
+8
+9            int[] curr = new int[n];
+10
+11            for(int j = 0; j < n; j++){
 12
-13    public int solve(int i,int j){
-14        if(i ==0 && j ==0){
-15            return 1;
-16        }
+13                if(i == 0 && j == 0){
+14                    curr[j] = 1;
+15                    continue;
+16                }
 17
-18        if(i<0 || j <0){
-19            return 0;
-20        }
-21
-22        if(dp[i][j] != -1){
-23            return dp[i][j];
-24        }
-25
-26        int up = solve(i-1,j);
-27        int left = solve(i,j-1);
+18                int up = 0;
+19                int left = 0;
+20
+21                if(i > 0){
+22                    up = prev[j];
+23                }
+24
+25                if(j > 0){
+26                    left = curr[j-1];
+27                }
 28
-29        return dp[i][j] =up+left;
-30    }
-31}
+29                curr[j] = up + left;
+30            }
+31
+32            prev = curr;
+33        }
+34
+35        return prev[n-1];
+36    }
+37}
