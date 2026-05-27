@@ -12,32 +12,37 @@
 12
 13        int n = nums.length;
 14
-15        boolean[][] dp = new boolean[n][target+1];
+15        boolean[] prev= new boolean[target+1];
 16
 17        //target 0
-18        for(int i=0;i<n;i++){
-19            dp[i][0] = true;
-20        }
+18        prev[0] = true;
+19
+20        //first element
 21
-22        //first element
-23
-24        if(nums[0] <= target){
-25            dp[0][nums[0]] = true;
-26        }
+22        if(nums[0] <= target){
+23            prev[nums[0]] = true;
+24        }
+25
+26        for(int i=1; i<n;i++){
 27
-28        for(int i=1; i<n;i++){
-29            for(int j =1;j<= target;j++){
-30                boolean notTake = dp[i-1][j];
-31                boolean take = false;
-32
-33                if(nums[i] <= j){
-34                    take = dp[i-1][j-nums[i]];
-35                }
-36
-37                dp[i][j] = take||notTake;
-38            }
-39        }
-40
-41        return dp[n-1][target];
-42    }
-43}
+28            boolean[] curr = new boolean[target+1];
+29
+30            curr[0] = true;
+31
+32            for(int j =1;j<= target;j++){
+33                boolean notTake = prev[j];
+34                boolean take = false;
+35
+36                if(nums[i] <= j){
+37                    take = prev[j-nums[i]];
+38                }
+39
+40                curr[j] = take||notTake;
+41            }
+42
+43            prev = curr;
+44        }
+45
+46        return prev[target];
+47    }
+48}
