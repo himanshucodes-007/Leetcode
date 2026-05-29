@@ -1,40 +1,38 @@
 1class Solution {
-2    int[][] dp;
-3    public int coinChange(int[] coins, int amount) {
-4        int n = coins.length;
-5
-6        dp = new int[n][amount+1];
-7        for(int[] row : dp){
-8            Arrays.fill(row, -1);
-9        }
-10
-11        int ans = solve(n-1,amount,coins);
-12        return ans >= Integer.MAX_VALUE ? -1 : ans;
-13    }
-14
-15    public int solve(int i, int target, int[] coins){
-16        if(i==0){
-17            if(target %coins[0] ==0){
-18                return target/coins[0];
-19            }
+2    public int coinChange(int[] coins, int amount) {
+3        int n = coins.length;
+4
+5        int[][] dp = new int[n][amount+1];
+6        
+7        for(int t =0; t <= amount; t++){
+8            if(t% coins[0] ==0){
+9                dp[0][t] = t/coins[0];
+10            }
+11            else{
+12                dp[0][t] = Integer.MAX_VALUE;
+13            }
+14        }
+15
+16        for(int i =1; i<n; i++){
+17            for(int target =0; target <= amount; target++){
+18
+19                int notTake = dp[i-1][target];
 20
-21            return Integer.MAX_VALUE;
-22        }
-23
-24        if(dp[i][target] != -1) return dp[i][target];
-25
-26        int notTake= solve(i-1,target,coins);
-27
-28        int take = Integer.MAX_VALUE;
+21                int take = Integer.MAX_VALUE;
+22                if (coins[i] <= target) {
+23                    int res = dp[i][target - coins[i]];
+24
+25                    if (res != Integer.MAX_VALUE) {
+26                        take = 1 + res;
+27                    }
+28                }
 29
-30        if (coins[i] <= target) {
-31            int res = solve(i, target - coins[i], coins);
-32
-33            if (res != Integer.MAX_VALUE) {
-34                take = 1 + res;
-35            }
-36        }
-37
-38        return dp[i][target] = Math.min(take,notTake);
-39    }
-40}
+30                dp[i][target] = Math.min(take,notTake);
+31
+32            }
+33        }
+34
+35        int ans = dp[n-1][amount];
+36        return ans >= Integer.MAX_VALUE ? -1 : ans;
+37    }
+38}
