@@ -1,28 +1,25 @@
 1class Solution {
-2    int[][] dp;
-3    public int numDistinct(String s, String t) {
-4        int n = s.length();
-5        int m = t.length();
-6
-7        dp = new int[n][m];
-8
-9        for(int[] row: dp){
-10            Arrays.fill(row,-1);
-11        }
-12
-13        return solve(n-1,m-1,s,t);
-14    }
-15
-16    private int solve(int i, int j, String s1,String s2){
-17        if(j<0) return 1;
-18        if(i<0) return 0;
-19
-20        if(dp[i][j] != -1) return dp[i][j];
-21
-22        if(s1.charAt(i) == s2.charAt(j)){
-23            return dp[i][j] = solve(i-1,j-1,s1,s2)+solve(i-1,j,s1,s2);
-24        }
-25        
-26        return dp[i][j] =solve(i-1,j,s1,s2);
-27    }
-28}
+2    public int numDistinct(String s, String t) {
+3        int n = s.length();
+4        int m = t.length();
+5
+6        int[][] dp = new int[n+1][m+1];
+7
+8        for(int i=0; i<=n;i++){
+9            dp[i][0] =1;
+10        }
+11
+12        for(int i=1; i<=n; i++){
+13            for(int j=1; j<=m;j++){
+14                if(s.charAt(i-1) == t.charAt(j-1)){
+15                    dp[i][j] = dp[i-1][j-1]+dp[i-1][j];
+16                }
+17                else{
+18                    dp[i][j] = dp[i-1][j];
+19                }
+20            }
+21        }
+22
+23        return dp[n][m];
+24    }
+25}
