@@ -1,33 +1,35 @@
 1class Solution {
-2    int[][][] dp;
+2
 3    public int maxProfit(int[] prices) {
-4        int n = prices.length;
-5
-6        dp= new int[n][2][3];
-7
-8        for(int[][] mat: dp){
-9            for(int[] row: mat){
-10                Arrays.fill(row,-1);
-11            }
-12        }
-13
-14        return solve(0,1,2,prices);
-15    }
+4
+5        int n = prices.length;
+6
+7        int[][][] dp = new int[n + 1][2][3];
+8
+9        for (int i = n - 1; i >= 0; i--) {
+10
+11            for (int buy = 0; buy <= 1; buy++) {
+12
+13                for (int cap = 1; cap <= 2; cap++) {
+14
+15                    if (buy == 1) {
 16
-17    private int solve(int i, int buy, int cap, int[] prices){
-18
-19        if(i == prices.length || cap == 0){
-20            return 0;
-21        }
-22
-23        if(dp[i][buy][cap] != -1){
-24            return dp[i][buy][cap];
-25        }
-26
-27        if(buy ==1){
-28            return dp[i][buy][cap] =  Math.max(-prices[i]+solve(i+1,0,cap,prices), solve(i+1,1,cap,prices));
-29        }
-30
-31        return dp[i][buy][cap] = Math.max(prices[i]+solve(i+1,1,cap-1,prices), solve(i+1,0,cap,prices));
-32    }
-33}
+17                        dp[i][buy][cap] = Math.max(
+18                            -prices[i] + dp[i + 1][0][cap],
+19                            dp[i + 1][1][cap]
+20                        );
+21
+22                    } else {
+23
+24                        dp[i][buy][cap] = Math.max(
+25                            prices[i] + dp[i + 1][1][cap - 1],
+26                            dp[i + 1][0][cap]
+27                        );
+28                    }
+29                }
+30            }
+31        }
+32
+33        return dp[0][1][2];
+34    }
+35}
